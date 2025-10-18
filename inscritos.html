@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista de Inscritos</title>
+<style>
+body { font-family:'Poppins', sans-serif; background:#f2f6fa; padding:20px; }
+h1 { color:#3498db; }
+ul { background:white; padding:20px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.1); list-style:none; }
+li { padding:10px 0; border-bottom:1px solid #eee; }
+button { padding:10px; border:none; border-radius:8px; background:#e74c3c; color:white; cursor:pointer; margin-top:20px; }
+button:hover { background:#c0392b; }
+</style>
+</head>
+<body>
+
+<h1>Lista de Inscritos</h1>
+<ul id="listaInscritos"></ul>
+<button id="logoutBtn">Sair</button>
+
+<script>
+if(localStorage.getItem('adminLogado')!=='true'){
+    alert('Acesso negado!');
+    window.location.href='login-admin.html';
+}
+
+const inscritos = JSON.parse(localStorage.getItem('nomeUsuarioTodos') || '[]');
+const lista = document.getElementById('listaInscritos');
+if(inscritos.length===0){
+    lista.innerHTML='<li>Nenhum inscrito ainda.</li>';
+}else{
+    inscritos.forEach(nome=>{
+        const li=document.createElement('li');
+        li.textContent=nome;
+        lista.appendChild(li);
+    });
+}
+
+document.getElementById('logoutBtn').addEventListener('click',()=>{
+    localStorage.removeItem('adminLogado');
+    window.location.href='login-admin.html';
+});
+</script>
+
+</body>
+</html>

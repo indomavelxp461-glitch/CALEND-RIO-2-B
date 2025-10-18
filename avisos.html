@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVISOS - 2º B</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: #f2f6fa;
+  color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+header {
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  width: 100%;
+  padding: 25px 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.container {
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin: 40px auto 50px;
+}
+.notice-card {
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  border-left: 6px solid #3498db;
+}
+.notice-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.notice-card h3 {
+  margin: 0 0 10px 0;
+  color: #3498db;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.notice-card p {
+  margin: 6px 0;
+  line-height: 1.5;
+  color: #444;
+}
+.back-button {
+  margin-top: 40px;
+  text-decoration: none;
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+.back-button:hover {
+  background-color: #2176bd;
+}
+footer {
+  text-align: center;
+  padding: 15px;
+  background-color: #bdc3c7;
+  width: 100%;
+  color: #2c3e50;
+  font-size: 0.9em;
+}
+</style>
+</head>
+<body>
+
+<header>📢 Avisos - 2º B</header>
+
+<div class="container">
+  <a href="index.html" class="back-button">⬅ Voltar ao Painel Principal</a>
+
+  <div class="notice-card">
+    <h3>🔔 Aviso Geral</h3>
+    <p>Verifique o calendário escolar regularmente para manter-se atualizado sobre prazos e atividades.</p>
+  </div>
+
+  <div class="notice-card">
+    <h3>⚠️ Atenção</h3>
+    <p>Confirme todas as datas de entrega com os professores. Alterações podem ocorrer durante o trimestre.</p>
+  </div>
+</div>
+
+<footer>Calendário Escolar — Página de Avisos | Atualizado em 18/10/2025</footer>
+
+</body>
+</html>
