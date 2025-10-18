@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Painel do Administrador - Feedbacks</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#f4f6f8;--card:#fff;--primary:#007bff;--danger:#dc3545;--muted:#6b7280}
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:var(--bg);
+    color:#222;
+  }
+
+  .container{
+    max-width:1100px;
+    margin:0 auto;
+    padding:20px;
+    min-height:calc(100vh - 40px); /* evita jump de layout */
+  }
+
+  h1{
+    text-align:center;
+    margin:18px 0 22px;
+    color:#333;
+  }
+
+  /* login box */
+  #login {
+    max-width:420px;
+    margin:40px auto;
+    background:var(--card);
+    padding:22px;
+    border-radius:14px;
+    box-shadow:0 6px 18px rgba(10,10,10,0.06);
+    text-align:center;
+  }
+  #login h3{margin:0 0 10px}
+  input[type=password]{
+    width:100%;
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid #d1d5db;
+    font-size:15px;
+    margin-top:10px;
+    outline:none;
+    background:#fff;
+  }
+  button{
+    margin-top:14px;
+    background:var(--primary);
+    border:none;
+    color:#fff;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+  }
+  button:hover{ filter:brightness(.95) }
+
+  /* painel */
+  #painel {
+    display:none;
+  }
+  .panel-wrap{
+    background:var(--card);
+    padding:16px;
+    border-radius:12px;
+    box-shadow:0 6px 18px rgba(10,10,10,0.06);
+  }
+
+  .top-row{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+  }
+  .counts{color:var(--muted);font-weight:600}
+
+  /* responsive table */
+  .table-wrap{
+    width:100%;
+    overflow:auto;
+    border-radius:10px;
+    background:transparent;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:800px; /* força scroll horizontal em telas pequenas em vez de quebrar layout */
+    background:transparent;
+  }
+  thead th{
+    text-align:left;
+    padding:12px 14px;
+    background:var(--primary);
+    color:#fff;
+    font-weight:700;
+  }
+  tbody td{
+    padding:12px 14px;
+    vertical-align:top;
+    background:#fff;
+    border-bottom:1px solid #f1f5f9;
+    max-width:420px;
+  }
+  tbody tr:nth-child(even) td{ background:#fbfdff; }
+
+  /* mensagem cell: preserva quebras e quebra palavras longas */
+  .msg-cell{
+    white-space:pre-wrap; /* preserva quebras de linha */
+    word-break:break-word;
+    overflow-wrap:break-word;
+    max-width:520px;
+  }
+
+  .empty{
+    text-align:center;
+    padding:18px;
+    color:var(--muted);
+    margin-top:14px;
+    background:var(--card);
+    border-radius:10px;
+  }
+
+  .actions-row{display:flex;gap:8px;align-items:center}
+  .logout {
+    background:var(--danger);
+    border:none;color:#fff;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600;
+  }
+  .logout:hover{ filter:brightness(.95) }
+
+  .btn-del{
+    background:var(--danger);
+    border:none;padding:8px 10px;border-radius:8px;color:#fff;cursor:pointer;font-weight:700;
+  }
+  .btn-del:hover{ filter:brightness(.95) }
+
+  a.link{
+    color:var(--primary);
+    text-decoration:none;
+    font-weight:600;
+  }
+
+  @media (max-width:900px){
+    .top-row{ flex-direction:column; align-items:flex-start; gap:8px; }
+    table{ min-width:700px; }
+  }
+  @media (max-width:520px){
+    table{ min-width:600px; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>📋 Painel do Administrador</h1>
+
+    <div id="login" class="panel-wrap">
+      <h3>Digite a senha do administrador</h3>
+      <input type="password" id="senha" placeholder="Senha" />
+      <div style="display:flex;gap:8px;justify-content:center;align-items:center;margin-top:12px">
+        <button onclick="verificarSenha()">Entrar</button>
+      </div>
+      <p id="erro" style="color:#dc3545;font-weight:700;margin-top:10px"></p>
+    </div>
+
+    <div id="painel" class="panel-wrap" aria-hidden="true">
+      <div class="top-row">
+        <div>
+          <strong>Feedbacks</strong>
+          <div class="counts" id="countsText">—</div>
+        </div>
+
+        <div class="actions-row">
+          <button class="logout" onclick="sair()">Sair</button>
+        </div>
+      </div>
+
+      <div class="table-wrap" id="tableWrap">
+        <table id="tabelaFeedbacks" role="table" aria-label="Lista de feedbacks">
+          <thead>
+            <tr>
+              <th style="width:140px">Nome</th>
+              <th>Mensagem</th>
+              <th style="width:110px">Tipo</th>
+              <th style="width:160px">Data</th>
+              <th style="width:110px">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="corpoTabela"></tbody>
+        </table>
+      </div>
+
+      <p class="empty" id="semFeedbacks" style="display:none">Nenhum feedback recebido ainda.</p>
+
+      <div style="margin-top:14px">
+        <a class="link" href="feedback.html">⬅️ Voltar ao Painel de Feedback</a>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* CONFIG: senha do admin */
+const SENHA_ADMIN = "@Verde2008";
+
+/* helpers */
+function getFeedbacks(){ return JSON.parse(localStorage.getItem("feedbacks") || "[]"); }
+function saveFeedbacks(fb){ localStorage.setItem("feedbacks", JSON.stringify(fb)); }
+function formatDate(iso){
+  try{
+    const d = new Date(iso);
+    if(isNaN(d)) return String(iso || '');
+    return d.toLocaleString();
+  }catch(e){ return String(iso || ''); }
+}
+
+/* login */
+function verificarSenha(){
+  const senha = document.getElementById("senha").value.trim();
+  const erro = document.getElementById("erro");
+  if(senha === SENHA_ADMIN){
+    document.getElementById("login").style.display = "none";
+    const painel = document.getElementById("painel");
+    painel.style.display = "block";
+    painel.setAttribute('aria-hidden','false');
+    erro.innerText = "";
+    carregarFeedbacks();
+    // evita deslocamento inesperado: rola pro topo do painel
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    erro.innerText = "❌ Senha incorreta!";
+  }
+}
+
+/* carregar e renderizar */
+function carregarFeedbacks(){
+  let feedbacks = getFeedbacks();
+
+  // normalize vis (para evitar valores estranhos) e garantir ids
+  let modified = false;
+  for(let i=0;i<feedbacks.length;i++){
+    const f = feedbacks[i];
+    // normaliza vis
+    if(f && f.vis){
+      f.vis = String(f.vis).toLowerCase().trim();
+    } else {
+      f.vis = 'public'; // fallback
+      modified = true;
+    }
+
+    // garante id para entradas antigas
+    if(!f.id){
+      f.id = (f.createdAt || Date.now().toString()) + "-" + Math.random().toString(36).slice(2,8);
+      modified = true;
+    }
+    // garante campo mensagem/nome te extenso como string
+    f.mensagem = f.mensagem == null ? '' : String(f.mensagem);
+    f.nome = f.nome == null ? 'Anônimo' : String(f.nome);
+  }
+  if(modified) saveFeedbacks(feedbacks);
+
+  // ordenar por data (mais recente primeiro). tenta createdAt, depois data se existir.
+  feedbacks.sort((a,b)=>{
+    const ta = a.createdAt || a.data || '';
+    const tb = b.createdAt || b.data || '';
+    // strings ISO têm ordem lexicográfica compatível; se inválidos, joga nulos por baixo
+    return String(tb).localeCompare(String(ta));
+  });
+
+  const corpo = document.getElementById("corpoTabela");
+  const vazio = document.getElementById("semFeedbacks");
+  const table = document.getElementById("tabelaFeedbacks");
+  const countsText = document.getElementById("countsText");
+  corpo.innerHTML = "";
+
+  if(!feedbacks || feedbacks.length === 0){
+    table.style.display = "none";
+    vazio.style.display = "block";
+    countsText.textContent = "0 públicos • 0 privados";
+    return;
+  } else {
+    table.style.display = "";
+    vazio.style.display = "none";
+  }
+
+  // contabiliza públicos/privados
+  const pubCount = feedbacks.filter(f=> String(f.vis).toLowerCase().trim() === 'public').length;
+  const privCount = feedbacks.filter(f=> String(f.vis).toLowerCase().trim() === 'private').length;
+  countsText.textContent = `${pubCount} público(s) • ${privCount} privado(s) — total ${feedbacks.length}`;
+
+  // construir as linhas
+  feedbacks.forEach((fb)=>{
+    const tr = document.createElement("tr");
+
+    // nome
+    const tdNome = document.createElement("td");
+    tdNome.textContent = fb.nome || "Anônimo";
+    tdNome.title = fb.nome || "Anônimo";
+
+    // mensagem (preserva quebras)
+    const tdMsg = document.createElement("td");
+    tdMsg.className = "msg-cell";
+    tdMsg.textContent = fb.mensagem || "";
+
+    // tipo
+    const tdTipo = document.createElement("td");
+    const tipoLabel = (String(fb.vis).toLowerCase().trim() === 'public') ? "Público" : "Privado";
+    tdTipo.textContent = tipoLabel;
+
+    // data
+    const tdData = document.createElement("td");
+    const dataStr = fb.createdAt || fb.data || '';
+    tdData.textContent = formatDate(dataStr);
+
+    // ações (excluir)
+    const tdAcoes = document.createElement("td");
+    const delBtn = document.createElement("button");
+    delBtn.className = "btn-del";
+    delBtn.type = "button";
+    delBtn.textContent = "Excluir";
+    delBtn.onclick = function(){ excluirFeedback(fb.id); };
+    tdAcoes.appendChild(delBtn);
+
+    tr.appendChild(tdNome);
+    tr.appendChild(tdMsg);
+    tr.appendChild(tdTipo);
+    tr.appendChild(tdData);
+    tr.appendChild(tdAcoes);
+
+    corpo.appendChild(tr);
+  });
+}
+
+/* excluir por id (seguro) */
+function excluirFeedback(id){
+  if(!confirm("Deseja realmente excluir este feedback?")) return;
+  const feedbacks = getFeedbacks();
+  const idx = feedbacks.findIndex(f => f.id === id);
+  if(idx === -1){
+    alert("Não foi possível localizar o feedback (já removido?). Atualize a página.");
+    return;
+  }
+  feedbacks.splice(idx,1);
+  saveFeedbacks(feedbacks);
+  carregarFeedbacks();
+}
+
+/* sair */
+function sair(){
+  document.getElementById("painel").style.display = "none";
+  document.getElementById("login").style.display = "block";
+  document.getElementById("senha").value = "";
+  document.getElementById("erro").innerText = "";
+  // rola para topo para evitar desalinhamento visual
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* init: se já tiver sessão (não implementado sessão real) nada — usuário precisa entrar */
+/* Mas por segurança podemos limpar possíveis estilos na inicialização */
+document.addEventListener("DOMContentLoaded", ()=>{
+  document.getElementById("painel").style.display = "none";
+  document.getElementById("login").style.display = "block";
+});
+</script>
+</body>
+</html>
