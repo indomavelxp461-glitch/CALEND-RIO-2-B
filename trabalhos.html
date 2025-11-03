@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📝 Trabalhos — 2º B</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f2f6fa;
+  color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  width: 100%;
+  padding: 25px 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.container {
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin: 40px auto 50px;
+}
+
+.card {
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.3s ease;
+  border-left: 6px solid #3498db; /* padrão azul */
+}
+
+.card.feito { border-left-color: #27ae60; }       /* verde: concluído */
+.card.pendente { border-left-color: #e74c3c; }   /* vermelho: pendente / urgente */
+.card.importante { border-left-color: #f39c12; } /* laranja: importante */
+.card.alerta { border-left-color: #ffc107; }     /* amarelo: atenção */
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.card p {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+.subject {
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.deadline {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.grade {
+  color: #27ae60;
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+.legend {
+  width: 90%;
+  max-width: 800px;
+  background-color: #e1e7ed;
+  border-radius: 12px;
+  padding: 15px 20px;
+  font-size: 0.9em;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.back-button {
+  margin-top: 20px;
+  text-decoration: none;
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #2176bd;
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  background-color: #bdc3c7;
+  width: 100%;
+  color: #2c3e50;
+  font-size: 0.9em;
+}
+</style>
+</head>
+<body>
+
+<header>📝 Trabalhos e Atividades — 2º B</header>
+
+<div class="container">
+
+  <!-- Legenda das cores -->
+  <div class="legend">
+    <strong>Legenda das cores:</strong><br>
+    <span style="color:#27ae60;">Verde:</span> Atividade concluída / nota definida.<br>
+    <span style="color:#e74c3c;">Vermelho:</span> Pendência / urgente, alunos que não realizaram devem procurar.<br>
+    <span style="color:#f39c12;">Laranja:</span> Importante, atenção especial.<br>
+    <span style="color:#3498db;">Azul:</span> Informações gerais, padrão.
+  </div>
+
+  <a href="index.html" class="back-button">⬅ Voltar ao Painel Principal</a>
+
+
+
+
+
+  <div class="card importante">
+    <p class="subject">📝 Biologia</p>
+    <h3>Atividade em Folha</h3>
+    <p><strong>Prazo:</strong> 07/11</p>
+    <p><strong>Nota:</strong> 6.0</p>
+    <p>Professora entregou uma folha explicando; se entregar depois do prazo, valor 3.0.</p>
+  </div>
+
+  <!-- Artes -->
+  <div class="card alerta">
+    <p class="subject">🎨 Artes</p>
+    <h3>Atividade com Quadros</h3>
+    <p><strong>Prazo:</strong> A definir</p>
+    <p><strong>Nota:</strong> A definir</p>
+    <p>Aguardar detalhes sobre valor, custo e prazo de entrega.</p>
+  </div>
+
+  <!-- Novo Artes -->
+  <div class="card importante">
+    <p class="subject">🎬 Artes</p>
+    <h3>Trabalho Teórico e Prático — Cinema</h3>
+    <p><strong>Valor:</strong> 4.0</p>
+    <p><strong>Descrição:</strong></p>
+    <p><u>Parte Teórica:</u><br>
+    O grupo deverá realizar uma pesquisa e entregar em folha para professora sobre:<br>
+    • A história do cinema<br>
+    • A invenção do cinematógrafo<br>
+    • A evolução tecnológica do som, da cor e da edição digital<br>
+    • As primeiras produções brasileiras</p>
+    <p><u>Parte Prática:</u><br>
+    Cada grupo deverá dublar uma cena de um filme, série ou outra produção audiovisual, com duração mínima de 2 minutos. Será permitida apenas uma cena por grupo.</p>
+  </div>
+
+</div>
+
+<footer>Calendário Escolar — Página de Trabalhos | Atualizado em 03/11/2025</footer>
+
+</body>
+</html>
