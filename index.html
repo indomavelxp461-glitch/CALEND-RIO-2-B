@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Meu Calendário Escolar — 2º B</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --primary: #3498db;
+    --accent: #2ecc71;
+    --bg: #ecf0f1;
+    --text: #2c3e50;
+    --modal-top: 120px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* TÍTULO */
+.title-container {
+    background-color: var(--primary);
+    color: #fff;
+    padding: 28px 32px;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    margin-bottom: 36px;
+}
+.title-container h1 { margin: 0; font-size: 2.4em; font-weight: 800; letter-spacing: 1.5px; }
+.title-container p { margin: 6px 0 0; opacity: 0.95; }
+
+/* PAINEL */
+.dashboard-panel {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+    width: 92%;
+    max-width: 820px;
+    padding: 14px;
+    margin-bottom: 60px;
+}
+.icon-link {
+    background-color: #fff;
+    border-radius: 14px;
+    padding: 24px 18px;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+.icon-link:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 36px rgba(52,152,219,0.12);
+    color: var(--primary);
+}
+.icon-emoji { font-size: 3.6rem; margin-bottom: 12px; }
+.icon-text { font-weight: 600; font-size: 1.05rem; text-transform: uppercase; }
+
+/* MODAL / AVISO */
+#aviso-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.58);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: var(--modal-top);
+    z-index: 9999;
+}
+
+#aviso-box {
+    width: 92%;
+    max-width: 420px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 26px;
+    text-align: center;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+    animation: modalIn .38s cubic-bezier(.22,.9,.28,1);
+}
+
+#aviso-box h2 { margin: 0 0 8px; font-size: 1.4rem; }
+#aviso-box p { margin: 0 0 18px; line-height: 1.35; }
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+}
+.modal-buttons button {
+    flex: 1;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+#btn-ok { background: var(--primary); color: #fff; }
+#btn-consultar { background: var(--accent); color: #fff; }
+
+/* animação */
+@keyframes modalIn {
+    from { opacity: 0; transform: translateY(-8px) scale(.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* responsividade */
+@media (max-width: 640px) {
+    .dashboard-panel { grid-template-columns: 1fr; max-width: 92%; }
+    .title-container h1 { font-size: 1.6rem; }
+    :root { --modal-top: 90px; }
+}
+</style>
+</head>
+<body>
+
+<!-- MODAL / AVISO -->
+<div id="aviso-overlay" role="dialog" aria-modal="true" aria-labelledby="aviso-title">
+    <div id="aviso-box">
+        <h2 id="aviso-title">🚧 Site em desenvolvimento</h2>
+        <p>
+            Estamos realizando melhorias e adicionando novas funcionalidades.
+            <br><br>
+            Previsão para finalização: <strong>até o início de janeiro</strong>.
+        </p>
+
+        <div class="modal-buttons">
+            <button id="btn-ok" type="button">OK</button>
+            <button id="btn-consultar" type="button">CONSULTAR ATUALIZAÇÕES</button>
+        </div>
+    </div>
+</div>
+
+<!-- CONTEÚDO PRINCIPAL -->
+<div class="title-container">
+    <h1>Meu Calendário Escolar — 2º B</h1>
+    <p>Painel de Acesso Rápido</p>
+    <p style="margin-top:10px; font-size:0.98rem;">Bem-vindo(a), <strong id="nomeUsuario"></strong>!</p>
+</div>
+
+<div class="dashboard-panel" aria-label="Painel principal">
+    <a href="avisos.html" class="icon-link"><span class="icon-emoji">📣</span><span class="icon-text">AVISOS</span></a>
+    <a href="trabalhos.html" class="icon-link"><span class="icon-emoji">📝</span><span class="icon-text">TRABALHOS</span></a>
+    <a href="provas.html" class="icon-link"><span class="icon-emoji">🧠</span><span class="icon-text">PROVAS</span></a>
+    <a href="contatos.html" class="icon-link"><span class="icon-emoji">📧</span><span class="icon-text">CONTATOS</span></a>
+    <a href="login-admin.html" class="icon-link"><span class="icon-emoji">🔒</span><span class="icon-text">INSCRITOS</span></a>
+    <a href="feedback.html" class="icon-link"><span class="icon-emoji">💬</span><span class="icon-text">FEEDBACK</span></a>
+</div>
+
+<script>
+/* checa inscrição: se não existir, manda pra inscricao */
+const nomeUsuario = localStorage.getItem('nomeUsuario');
+if (!nomeUsuario) {
+    window.location.href = 'inscricao.html';
+}
+
+/* verifica se o aviso já foi fechado DURANTE esta sessão */
+const avisoFechado = sessionStorage.getItem("avisoFechado");
+
+if (avisoFechado === "true") {
+    document.getElementById("aviso-overlay").style.display = "none";
+} else {
+    document.getElementById("aviso-overlay").style.display = "flex";
+}
+
+/* mostra nome do usuário */
+document.getElementById('nomeUsuario').textContent = nomeUsuario || 'Usuário';
+
+/* ações do modal */
+document.getElementById("btn-ok").addEventListener("click", () => {
+    document.getElementById("aviso-overlay").style.display = "none";
+    sessionStorage.setItem("avisoFechado", "true");
+});
+
+document.getElementById("btn-consultar").addEventListener("click", () => {
+    sessionStorage.setItem("avisoFechado", "true");
+    window.location.href = "consultar.html";
+});
+
+/* ESC fecha também */
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+        document.getElementById("aviso-overlay").style.display = "none";
+        sessionStorage.setItem("avisoFechado", "true");
+    }
+});
+</script>
+
+</body>
+</html>
