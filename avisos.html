@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVISOS - 2º B</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary: #3498db;
+  --bg: #f5f6fa;
+  --text: #2c3e50;
+  --card-bg: #ffffff;
+  --footer-bg: #bdc3c7;
+}
+
+/* DARK MODE */
+body.dark {
+  --primary: #1a73e8;
+  --bg: #1f1f1f;
+  --text: #ffffff;
+  --card-bg: #2b2b2b;
+  --footer-bg: #3d3d3d;
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+header {
+  background-color: var(--primary);
+  color: white;
+  text-align: center;
+  width: 100%;
+  padding: 25px 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: background 0.3s ease;
+}
+
+.container {
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin: 40px auto 50px;
+}
+
+.notice-card {
+  background-color: var(--card-bg);
+  border-radius: 15px;
+  padding: 20px 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  border-left: 6px solid var(--primary);
+  transition: transform 0.25s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+}
+
+.notice-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.notice-card h3 {
+  margin: 0 0 10px 0;
+  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.notice-card p {
+  margin: 6px 0;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.back-button {
+  margin-top: 40px;
+  text-decoration: none;
+  background-color: var(--primary);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+.back-button:hover {
+  background-color: #2176bd;
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  background-color: var(--footer-bg);
+  width: 100%;
+  color: var(--text);
+  font-size: 0.9em;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* TOGGLE DE TEMA */
+.theme-toggle {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 999;
+}
+
+.switch {
+  width: 60px;
+  height: 28px;
+  background: #b7d6ff;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  cursor: pointer;
+  position: relative;
+}
+
+.switch::after {
+  content: "";
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  left: 3px;
+  transition: transform .2s ease;
+}
+
+.icon {
+  position: absolute;
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+.sun { left: 6px; opacity: 1; transition: opacity .2s; }
+.moon { right: 6px; opacity: 0; transition: opacity .2s; }
+
+#toggleTheme:checked + .switch {
+  background: #3b3b3b;
+}
+#toggleTheme:checked + .switch::after {
+  transform: translateX(32px);
+}
+#toggleTheme:checked + .switch .sun { opacity: 0; }
+#toggleTheme:checked + .switch .moon { opacity: 1; }
+
+</style>
+</head>
+<body>
+
+<div class="theme-toggle">
+  <input type="checkbox" id="toggleTheme">
+  <label for="toggleTheme" class="switch">
+    <span class="icon sun">☀️</span>
+    <span class="icon moon">🌙</span>
+  </label>
+</div>
+
+<header>📢 Avisos - 2º B</header>
+
+<div class="container">
+  <a href="index.html" class="back-button">⬅ Voltar ao Painel Principal</a>
+
+  <div class="notice-card">
+    <h3>🔔 Aviso Geral</h3>
+    <p>Verifique o calendário escolar regularmente para manter-se atualizado sobre prazos e atividades.</p>
+  </div>
+
+  <div class="notice-card">
+    <h3>⚠️ Atenção</h3>
+    <p>Confirme todas as datas de entrega com os professores. Alterações podem ocorrer durante o trimestre.</p>
+  </div>
+
+  <div class="notice-card">
+    <h3>📘 Aviso Importante</h3>
+    <p>Se não entenderem algum trabalho, me procurem ou algum professor responsável pelo trabalho.</p>
+  </div>
+
+</div>
+
+<footer>Calendário Escolar — Página de Avisos | Atualizado em 20/10/2025</footer>
+
+<script>
+// MODO ESCURO
+const toggle = document.getElementById("toggleTheme");
+const savedTheme = localStorage.getItem("tema");
+if (savedTheme === "dark") {
+  document.body.classList.add("dark");
+  toggle.checked = true;
+}
+toggle.addEventListener("change", () => {
+  document.body.classList.toggle("dark");
+  localStorage.setItem("tema", document.body.classList.contains("dark") ? "dark" : "light");
+});
+</script>
+
+</body>
+</html>

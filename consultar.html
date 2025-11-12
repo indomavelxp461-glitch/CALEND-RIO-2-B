@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atualizações — Meu Calendário Escolar 2º B</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --primary: #3498db;
+    --accent: #2ecc71;
+    --bg: #ecf0f1;
+    --card-bg: #ffffff;
+    --text: #2c3e50;
+}
+
+/* 🌙 MODO ESCURO */
+.dark-mode {
+    --bg: #1f1f1f;
+    --card-bg: #2b2b2b;
+    --text: #e5e5e5;
+    --primary: #2980b9;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg);
+    font-family: 'Poppins', sans-serif;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* HEADER */
+.header {
+    background-color: var(--primary);
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    padding: 28px 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.header h2 {
+    margin: 0;
+    font-size: 1.9rem;
+    font-weight: 800;
+}
+
+/* SECTION TITLE */
+.section-title {
+    width: 90%;
+    max-width: 700px;
+    margin: 30px 0 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+/* CARD */
+.card {
+    width: 90%;
+    max-width: 700px;
+    background: var(--card-bg);
+    padding: 18px 22px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    margin-bottom: 16px;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(52,152,219,0.18);
+}
+.card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.card-desc {
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+/* VOLTAR */
+.back-btn {
+    margin: 40px 0 60px;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--primary);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s ease;
+}
+.back-btn:hover {
+    background-color: #2176b8;
+}
+</style>
+
+<script>
+// 🌓 CARREGA O TEMA SALVO NO LOCALSTORAGE (SEM BOTÃO AQUI)
+document.addEventListener("DOMContentLoaded", () => {
+    const temaSalvo = localStorage.getItem("theme");
+    if (temaSalvo === "dark") {
+        document.body.classList.add("dark-mode");
+    }
+});
+</script>
+
+</head>
+<body>
+
+<div class="header">
+    <h2>🔧 Consultar Atualizações</h2>
+    <p>Veja tudo o que está sendo desenvolvido no site</p>
+</div>
+
+<!-- CATEGORIA: INTERFACE -->
+<div class="section-title">🎨 Interface</div>
+
+<div class="card">
+    <div class="card-title">Tema Claro / Escuro</div>
+    <div class="card-desc">Opção para alternar manualmente entre tema claro e escuro.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Visual mais profissional no painel</div>
+    <div class="card-desc">Nova organização visual e ícones mais modernos no painel principal.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Animações suaves</div>
+    <div class="card-desc">Transições mais suaves ao navegar pelo site.</div>
+</div>
+
+<!-- CATEGORIA: FUNCIONALIDADES -->
+<div class="section-title">⚙️ Funcionalidades</div>
+
+<div class="card">
+    <div class="card-title">Trocar nome do usuário</div>
+    <div class="card-desc">Você poderá alterar o nome cadastrado sem precisar refazer a inscrição.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Filtro de pesquisa</div>
+    <div class="card-desc">Pesquisa para encontrar trabalhos, provas ou avisos digitando palavras-chave.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Ordenação automática por data mais próxima</div>
+    <div class="card-desc">Organização automática dos prazos mais próximos.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Modo administrador</div>
+    <div class="card-desc">Acesso administrativo com senha para editar e adicionar informações.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Separação de trabalhos/provas vencidos</div>
+    <div class="card-desc">Itens vencidos serão visualmente separados.</div>
+</div>
+
+<!-- CATEGORIA: OUTROS -->
+<div class="section-title">📌 Outros</div>
+
+<div class="card">
+    <div class="card-title">Feedback anônimo</div>
+    <div class="card-desc">Envie opiniões sem identificação.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Melhoria das legendas de cores</div>
+    <div class="card-desc">Novos ícones e legenda explicativa.</div>
+</div>
+
+<button class="back-btn" onclick="window.location.href='index.html'">Voltar</button>
+
+</body>
+</html>
