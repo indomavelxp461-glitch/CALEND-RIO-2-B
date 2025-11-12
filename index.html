@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Calendário Escolar — 2º B</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --primary: #3498db;
+    --accent: #2ecc71;
+    --bg: #f5f6fa;
+    --text: #2c3e50;
+    --panel-bg: #ffffff;
+    --shadow: rgba(0,0,0,0.08);
+}
+
+body.dark {
+    --primary: #1a73e8;
+    --accent: #27ae60;
+    --bg: #1f1f1f;
+    --panel-bg: #2b2b2b;
+    --text: #ffffff;
+    --shadow: rgba(0,0,0,0.3);
+}
+
+* { box-sizing: border-box; margin:0; padding:0; }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* HEADER */
+.title-container {
+    background-color: var(--primary);
+    color: #fff;
+    padding: 60px 32px 28px 32px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    margin-bottom: 36px;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    box-shadow: 0 4px 14px var(--shadow);
+    transition: background 0.3s;
+}
+
+.title-container h1 { font-size: 2.3em; font-weight: 800; margin-bottom: 6px; }
+.title-container p { opacity: 0.95; font-weight: 500; }
+
+/* MENU ICON & TOGGLE THEME */
+.menu-icon {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-size: 2.5rem; 
+    cursor: pointer;
+    color: #fff;
+    z-index: 10001;
+}
+.menu-icon:hover { color: #f0f0f0; }
+
+.theme-toggle {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    z-index: 10001;
+}
+
+.switch {
+    width: 60px;
+    height: 28px;
+    background: #b7d6ff;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    cursor: pointer;
+    position: relative;
+}
+
+.switch::after {
+    content: "";
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    left: 3px;
+    transition: transform 0.3s ease;
+}
+
+.icon { position: absolute; font-size: 1.2rem; pointer-events: none; }
+.sun { left: 6px; opacity: 1; }
+.moon { right: 6px; opacity: 0; }
+
+#toggleTheme:checked + .switch { background: #3b3b3b; }
+#toggleTheme:checked + .switch::after { transform: translateX(32px); }
+#toggleTheme:checked + .switch .sun { opacity: 0; }
+#toggleTheme:checked + .switch .moon { opacity: 1; }
+
+/* MENU LATERAL */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background-color: var(--panel-bg);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    transition: left 0.35s ease;
+    z-index: 10000;
+}
+
+.side-menu.active { left: 0; }
+
+.side-menu button {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+}
+.side-menu button:hover { background: #2176bd; }
+
+/* PAINEL PRINCIPAL */
+.dashboard-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 24px;
+    width: 92%;
+    max-width: 900px;
+}
+
+.icon-link {
+    background-color: var(--panel-bg);
+    border-radius: 16px;
+    padding: 28px 20px;
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px var(--shadow);
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+.icon-link:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px var(--shadow);
+    color: var(--primary);
+}
+
+.icon-emoji { font-size: 3.8rem; margin-bottom: 12px; }
+.icon-text { font-size: 1rem; text-align: center; }
+
+@keyframes pulse-click {
+    0% { transform: scale(1); box-shadow: 0 6px 18px var(--shadow); }
+    50% { transform: scale(1.1); box-shadow: 0 16px 36px var(--shadow); }
+    100% { transform: scale(1); box-shadow: 0 6px 18px var(--shadow); }
+}
+.animate-click { animation: pulse-click 0.35s ease; }
+
+/* MODAIS */
+#aviso-overlay, #nomeOverlay, #configOverlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 130px;
+    background: rgba(0,0,0,0.55);
+    z-index: 10003; /* maior que side-menu */
+}
+
+#aviso-box, #nomeBox, #configBox {
+    width: 90%;
+    max-width: 420px;
+    background: var(--panel-bg);
+    color: var(--text);
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    box-shadow: 0 10px 35px var(--shadow);
+}
+
+.modal-buttons { display: flex; gap: 10px; margin-top: 16px; }
+.modal-buttons button {
+    flex: 1;
+    padding: 12px 14px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+#btn-ok { background: var(--primary); color: #fff; }
+#btn-consultar { background: var(--accent); color: #fff; }
+
+#nomeBox input {
+    width: 90%;
+    padding: 10px;
+    margin: 12px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+#nomeBox button { padding: 10px 14px; border-radius: 8px; border:none; background: var(--primary); color:#fff; cursor:pointer; }
+
+.color-grid { display: grid; grid-template-columns: repeat(4, 40px); gap: 10px; justify-content: center; margin: 16px 0; }
+.color-swatch { width: 40px; height: 40px; border-radius: 8px; cursor: pointer; border: 2px solid #fff; }
+#customColorInput { width: 90%; padding: 8px 10px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #ccc; text-align: center; }
+#applyColorBtn, #resetColorBtn { padding: 8px 12px; border-radius: 8px; border:none; cursor:pointer; margin:4px; }
+#applyColorBtn { background: var(--primary); color:#fff; }
+#resetColorBtn { background: #ccc; color:#000; }
+</style>
+</head>
+<body>
+
+<div class="menu-icon" id="menuIcon">≡</div>
+<div class="side-menu" id="sideMenu">
+    <button id="trocarNome">Trocar nome de usuário</button>
+    <button id="feedback">Feedback Anônimo</button>
+    <button id="reclame">Reclame aqui</button>
+    <button id="config">Configuração do site</button>
+</div>
+
+<div class="title-container">
+    <div class="theme-toggle">
+        <input type="checkbox" id="toggleTheme">
+        <label for="toggleTheme" class="switch">
+            <span class="icon sun">☀️</span>
+            <span class="icon moon">🌙</span>
+        </label>
+    </div>
+    <h1>Meu Calendário Escolar — 2º B</h1>
+    <p>Painel de Acesso Rápido</p>
+    <p style="margin-top:10px; font-size:0.98rem;">Bem-vindo(a), <strong id="nomeUsuario"></strong>!</p>
+</div>
+
+<div class="dashboard-panel">
+    <a href="avisos.html" class="icon-link"><span class="icon-emoji">📣</span><span class="icon-text">AVISOS</span></a>
+    <a href="trabalhos.html" class="icon-link"><span class="icon-emoji">📝</span><span class="icon-text">TRABALHOS</span></a>
+    <a href="provas.html" class="icon-link"><span class="icon-emoji">🧠</span><span class="icon-text">PROVAS</span></a>
+    <a href="contatos.html" class="icon-link"><span class="icon-emoji">📧</span><span class="icon-text">CONTATOS</span></a>
+    <a href="#" class="icon-link"><span class="icon-emoji">📅</span><span class="icon-text">Calendário marcado</span></a>
+    <a href="#" class="icon-link"><span class="icon-emoji">⌛</span><span class="icon-text">Provas vencidas</span></a>
+    <a href="#" class="icon-link"><span class="icon-emoji">📝</span><span class="icon-text">Trabalhos vencidos</span></a>
+    <a href="#" class="icon-link"><span class="icon-emoji">🏖️</span><span class="icon-text">Feriados</span></a>
+    <a href="#" class="icon-link"><span class="icon-emoji">🗓️</span><span class="icon-text">Minha agenda</span></a>
+</div>
+
+<!-- MODAIS -->
+<div id="aviso-overlay">
+    <div id="aviso-box">
+        <h2>🚧 Site em desenvolvimento</h2>
+        <p>Estamos realizando melhorias e adicionando novas funcionalidades.<br><br>
+        Previsão para finalização: <strong>até o início de janeiro</strong>.</p>
+        <div class="modal-buttons">
+            <button id="btn-ok">OK</button>
+            <button id="btn-consultar">CONSULTAR ATUALIZAÇÕES</button>
+        </div>
+    </div>
+</div>
+
+<div id="nomeOverlay">
+    <div id="nomeBox">
+        <h2>Trocar nome de usuário</h2>
+        <input type="text" id="novoNome" placeholder="Digite seu nome">
+        <button id="salvarNome">Salvar</button>
+    </div>
+</div>
+
+<div id="configOverlay">
+    <div id="configBox">
+        <h2>Escolha a cor das caixas</h2>
+        <div class="color-grid">
+            <div class="color-swatch" data-color="#3498db" style="background:#3498db;"></div>
+            <div class="color-swatch" data-color="#e74c3c" style="background:#e74c3c;"></div>
+            <div class="color-swatch" data-color="#2ecc71" style="background:#2ecc71;"></div>
+            <div class="color-swatch" data-color="#f1c40f" style="background:#f1c40f;"></div>
+        </div>
+        <input type="text" id="customColorInput" placeholder="Código da cor (#123456)">
+        <div>
+            <button id="applyColorBtn">Aplicar</button>
+            <button id="resetColorBtn">Padrão do site</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Nome do usuário
+    const nomeUsuario = localStorage.getItem('nomeUsuario') || 'Usuário';
+    document.getElementById('nomeUsuario').textContent = nomeUsuario;
+
+    // Modal aviso
+    const avisoOverlay = document.getElementById("aviso-overlay");
+    const btnOk = document.getElementById("btn-ok");
+    const btnConsultar = document.getElementById("btn-consultar");
+
+    if(sessionStorage.getItem("avisoFechado") === "true") {
+        avisoOverlay.style.display = "none";
+    } else {
+        avisoOverlay.style.display = "flex";
+    }
+
+    btnOk.addEventListener("click", () => {
+        avisoOverlay.style.display = "none";
+        sessionStorage.setItem("avisoFechado", "true");
+    });
+    btnConsultar.addEventListener("click", () => {
+        sessionStorage.setItem("avisoFechado", "true");
+        window.location.href = "consultar.html";
+    });
+
+    // Modo escuro
+    const toggle = document.getElementById("toggleTheme");
+    if(localStorage.getItem("tema")==="dark") {
+        document.body.classList.add("dark");
+        toggle.checked = true;
+    }
+    toggle.addEventListener("change", () => {
+        document.body.classList.toggle("dark");
+        localStorage.setItem("tema", document.body.classList.contains("dark")?"dark":"light");
+    });
+
+    // Cards animados
+    document.querySelectorAll('.icon-link').forEach(card=>{
+        card.addEventListener('click', e=>{
+            e.preventDefault();
+            const link=card.getAttribute('href');
+            card.classList.add('animate-click');
+            setTimeout(()=>window.location.href=link,350);
+        });
+    });
+
+    // Menu lateral
+    const menuIcon = document.getElementById('menuIcon');
+    const sideMenu = document.getElementById('sideMenu');
+    menuIcon.addEventListener('click', ()=>sideMenu.classList.toggle('active'));
+
+    // Configuração de cores
+    const configOverlay = document.getElementById('configOverlay');
+    document.getElementById('config').addEventListener('click', ()=>configOverlay.style.display='flex');
+    configOverlay.addEventListener('click', e=>{if(e.target===configOverlay) configOverlay.style.display='none';});
+
+    document.querySelectorAll('.color-swatch').forEach(swatch=>{
+        swatch.addEventListener('click', ()=>{
+            const color = swatch.dataset.color;
+            document.querySelectorAll('.icon-link').forEach(box=>box.style.backgroundColor=color);
+            localStorage.setItem('caixaColor', color);
+        });
+    });
+
+    document.getElementById('applyColorBtn').addEventListener('click', ()=>{
+        const color=document.getElementById('customColorInput').value.trim();
+        if(/^#([0-9A-F]{3}){1,2}$/i.test(color)){
+            document.querySelectorAll('.icon-link').forEach(box=>box.style.backgroundColor=color);
+            localStorage.setItem('caixaColor', color);
+        } else alert('Digite um código de cor válido (#123456)');
+    });
+
+    document.getElementById('resetColorBtn').addEventListener('click', ()=>{
+        document.querySelectorAll('.icon-link').forEach(box=>box.style.backgroundColor='');
+        localStorage.removeItem('caixaColor');
+    });
+
+    const savedColor=localStorage.getItem('caixaColor');
+    if(savedColor) document.querySelectorAll('.icon-link').forEach(box=>box.style.backgroundColor=savedColor);
+
+    // FEEDBACK ANÔNIMO
+    document.getElementById('feedback').addEventListener('click', () => {
+        window.open('https://tellonym.me/joao.gabriel.leal/bestshot', '_blank');
+    });
+
+    // TROCAR NOME DE USUÁRIO
+    const nomeOverlay = document.getElementById('nomeOverlay');
+    const novoNomeInput = document.getElementById('novoNome');
+    const salvarNomeBtn = document.getElementById('salvarNome');
+    document.getElementById('trocarNome').addEventListener('click', () => {
+        nomeOverlay.style.display = 'flex';
+        novoNomeInput.value = localStorage.getItem('nomeUsuario') || '';
+    });
+    salvarNomeBtn.addEventListener('click', () => {
+        const novoNome = novoNomeInput.value.trim();
+        if(novoNome) {
+            localStorage.setItem('nomeUsuario', novoNome);
+            document.getElementById('nomeUsuario').textContent = novoNome;
+            nomeOverlay.style.display = 'none';
+        }
+    });
+    nomeOverlay.addEventListener('click', e => { if(e.target===nomeOverlay) nomeOverlay.style.display='none'; });
+
+});
+</script>
+</body>
+</html>
