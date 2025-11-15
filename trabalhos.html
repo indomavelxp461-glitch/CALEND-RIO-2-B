@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>📝 Trabalhos — 2º B</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #3498db;
+  --bg: #f5f6fa;
+  --text: #2c3e50;
+  --card-bg: #ffffff;
+  --feito: #27ae60;
+  --andamento: #f39c12;
+  --urgente: #e74c3c;
+  --footer-bg: #bdc3c7;
+}
+body.dark {
+  --primary: #1a73e8;
+  --bg: #1f1f1f;
+  --text: #ffffff;
+  --card-bg: #2b2b2b;
+  --feito: #27ae60;
+  --andamento: #f39c12;
+  --urgente: #e74c3c;
+  --footer-bg: #3d3d3d;
+}
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 0.3s, color 0.3s;
+}
+header {
+  background-color: var(--primary);
+  color: white;
+  text-align: center;
+  width: 100%;
+  padding: 18px 16px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.header-left { display:flex; align-items:center; gap:12px; margin-left:12px; }
+.title { font-size:1.05rem; }
+.theme-toggle {
+  margin-right:12px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight:700;
+}
+.container {
+  width: 90%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin: 30px auto 70px;
+}
+.card {
+  background-color: var(--card-bg);
+  border-radius: 15px;
+  padding: 18px 22px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  border-left: 6px solid var(--andamento);
+  transition: transform 0.25s ease, box-shadow 0.3s ease;
+  margin-bottom: 12px;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+.card.feito { border-left-color: var(--feito); opacity: 0.98; }
+.card.andamento { border-left-color: var(--andamento); }
+.card.urgente { border-left-color: var(--urgente); }
+.card h3,
+.card p,
+.subject { color: var(--text); }
+.legend {
+  width: 100%;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+.btn-row { display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
+button.marcar {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.25s;
+  font-weight:700;
+}
+button.marcar:hover { filter:brightness(.95); }
+button.desmarcar {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:700;
+}
+a.back-button {
+  margin-top: 10px;
+  text-decoration: none;
+  background-color: var(--primary);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  display: inline-block;
+}
+a.back-button:hover { background-color: #2176bd; }
+footer {
+  text-align: center;
+  padding: 12px;
+  background-color: var(--footer-bg);
+  width: 100%;
+  font-size: 0.95em;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.18s ease, visibility 0s linear 0.18s;
+  z-index: 2000;
+}
+.modal.active {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.18s ease;
+}
+.modal-content {
+  background: var(--card-bg);
+  color: var(--text);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  text-align: center;
+  max-width: 360px;
+  width: 92%;
+}
+.modal-content p { margin-bottom: 16px; font-size: 1rem; }
+.modal-actions { display:flex; gap:10px; justify-content:center; }
+.modal-content button {
+  padding: 9px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.modal-confirm { background: var(--feito); color: white; }
+.modal-cancel { background: var(--urgente); color: white; }
+.small { font-size:0.9rem; color: #666; }
+.count-badge { background: rgba(0,0,0,0.06); padding:6px 10px; border-radius:999px; font-weight:700; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <div class="title">📝 Trabalhos e Atividades — 2º B</div>
+    <div class="count-badge" id="concluidosCount">Concluídos: 0</div>
+  </div>
+  <div style="display:flex;align-items:center;">
+    <button class="theme-toggle" id="themeToggle">Tema</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="legend">
+    <strong>Legenda das cores:</strong><br>
+    <span style="color:var(--feito);">Verde:</span> Concluído.<br>
+    <span style="color:var(--andamento);">Laranja:</span> Em andamento.<br>
+    <span style="color:var(--urgente);">Vermelho:</span> Faltam 2 dias ou menos pro prazo.<br>
+  </div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <a href="index.html" class="back-button">⬅ Voltar ao Painel Principal</a>
+    <a href="vencidostrabalhos.html" class="back-button" style="background:#e74c3c;">❌ Ver Trabalhos Vencidos</a>
+  </div>
+
+  <!-- Exemplo de card -->
+  <div class="card" data-prazo="2025-11-19" data-id="trabalho-geografia-1">
+    <p class="subject">🌍 Geografia</p>
+    <h3>Pesquisa — Tema Único</h3>
+
+    <div style="display:flex;gap:12px;align-items:center;margin-top:6px;">
+      <p class="status"><strong>Status:</strong> <span class="status-text">Em andamento</span></p>
+      <p class="small"><strong>Prazo:</strong> <span class="prazo-text">19/11/2025</span></p>
+    </div>
+
+    <p style="margin-top:10px;">
+      📘 Trabalho de Geografia – Pesquisa Individual ou em Dupla<br><br>
+      🧭 Nesta atividade, você deverá pesquisar apenas 1 dos temas abaixo:<br>
+      1️⃣ Polarização Política no Brasil<br>
+      2️⃣ Malvinas – disputa territorial<br>
+      3️⃣ Haiti – instabilidade política e social<br>
+      4️⃣ Venezuela – instabilidade<br>
+      5️⃣ Venezuela e Essequibo (60%) / Guiana<br><br>
+      ✏️ <strong>Como fazer:</strong> escolha 1 tema, pesquise e escreva no caderno.<br>
+      👥 <strong>Formato:</strong> individual ou em dupla. ⚠️ Ambos copiam no caderno.<br>
+      🖊️ Vale 2.0 pontos no caderno.
+    </p>
+
+    <div class="btn-row">
+      <button class="marcar" aria-label="Marcar como concluído">Marcar como Concluído</button>
+      <!-- botão desmarcar será criado dinamicamente quando necessário -->
+    </div>
+  </div>
+
+  <!-- Duplicar cards conforme necessário com data-prazo e data-id diferentes -->
+</div>
+
+<footer id="footer">Calendário Escolar — Página de Trabalhos | Atualizado em 13/11/2025</footer>
+
+<!-- Modal -->
+<div class="modal" id="confirmModal" aria-hidden="true">
+  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalText">
+    <p id="modalText">Deseja marcar este trabalho como concluído?</p>
+    <div class="modal-actions">
+      <button class="modal-confirm" id="confirmYes">Sim</button>
+      <button class="modal-cancel" id="confirmNo">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- Config e utilitários ---------- */
+const THEME_KEY = 'tema'; // usa mesmo nome que seu index.html possivelmente usa
+const SALV_KEY = 'trabalhos_concluidos_v1';
+
+function parsePrazo(dateStr) {
+  return new Date(dateStr + 'T23:59:59');
+}
+
+function carregarConcluidos() {
+  try { const raw = localStorage.getItem(SALV_KEY); return raw ? JSON.parse(raw) : {}; }
+  catch(e){ console.error('Erro lendo localStorage', e); return {}; }
+}
+function salvarConcluidos(obj) { localStorage.setItem(SALV_KEY, JSON.stringify(obj)); }
+
+function aplicarTemaInicial() {
+  // respeita o tema salvo (valor 'dark' ou 'light' — se faltar, mantém atual)
+  const tema = localStorage.getItem(THEME_KEY);
+  if (tema === 'dark') document.body.classList.add('dark');
+  else if (tema === 'light') document.body.classList.remove('dark');
+  atualizarTextoBotaoTema();
+}
+function alternarTema() {
+  if (document.body.classList.contains('dark')) {
+    document.body.classList.remove('dark');
+    localStorage.setItem(THEME_KEY, 'light');
+  } else {
+    document.body.classList.add('dark');
+    localStorage.setItem(THEME_KEY, 'dark');
+  }
+  atualizarTextoBotaoTema();
+}
+function atualizarTextoBotaoTema() {
+  const b = document.getElementById('themeToggle');
+  b.textContent = document.body.classList.contains('dark') ? 'Tema: Escuro' : 'Tema: Claro';
+}
+
+/* ---------- Modal e estado de confirmação (dinâmico) ---------- */
+const modal = document.getElementById('confirmModal');
+const modalText = document.getElementById('modalText');
+const modalYes = document.getElementById('confirmYes');
+const modalNo = document.getElementById('confirmNo');
+let currentCard = null;
+let pendingAction = null; // 'marcar' ou 'desmarcar'
+
+function abrirModal(card, action) {
+  currentCard = card;
+  pendingAction = action;
+  if (action === 'marcar') {
+    modalText.textContent = 'Deseja marcar este trabalho como concluído?';
+    modalYes.textContent = 'Sim, marcar';
+  } else {
+    modalText.textContent = 'Deseja remover a marcação (desmarcar) deste trabalho?';
+    modalYes.textContent = 'Sim, desmarcar';
+  }
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden','false');
+}
+function fecharModal() {
+  currentCard = null;
+  pendingAction = null;
+  modal.classList.remove('active');
+  modal.setAttribute('aria-hidden','true');
+}
+
+/* ---------- UI / lógica de cards ---------- */
+function atualizarVisualPorPrazo(card) {
+  card.classList.remove('andamento','urgente');
+  const prazoStr = card.dataset.prazo;
+  if (!prazoStr) return;
+  const prazo = parsePrazo(prazoStr);
+  const hoje = new Date();
+  const diffMs = prazo - hoje;
+  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays <= 2) card.classList.add('urgente');
+  else card.classList.add('andamento');
+}
+
+function aplicarConcluidoNoCard(card, marcado) {
+  const statusText = card.querySelector('.status-text');
+  const btnMarcar = card.querySelector('button.marcar');
+  // procura se já existe botão desmarcar
+  let btnDesmarcar = card.querySelector('button.desmarcar');
+
+  if (marcado) {
+    card.classList.add('feito'); card.classList.remove('andamento','urgente');
+    if (statusText) statusText.textContent = 'Concluído';
+    if (btnMarcar) {
+      btnMarcar.textContent = 'Concluído';
+      btnMarcar.disabled = true;
+      btnMarcar.style.opacity = '0.85';
+      btnMarcar.style.cursor = 'default';
+    }
+    // cria botão desmarcar se não existir
+    if (!btnDesmarcar) {
+      btnDesmarcar = document.createElement('button');
+      btnDesmarcar.className = 'desmarcar';
+      btnDesmarcar.textContent = 'Desmarcar';
+      btnDesmarcar.addEventListener('click', (e) => {
+        e.preventDefault();
+        abrirModal(card, 'desmarcar');
+      });
+      const btnRow = card.querySelector('.btn-row');
+      if (btnRow) btnRow.appendChild(btnDesmarcar);
+    }
+  } else {
+    card.classList.remove('feito');
+    atualizarVisualPorPrazo(card);
+    if (statusText) statusText.textContent = 'Em andamento';
+    if (btnMarcar) {
+      btnMarcar.textContent = 'Marcar como Concluído';
+      btnMarcar.disabled = false;
+      btnMarcar.style.opacity = '';
+      btnMarcar.style.cursor = 'pointer';
+    }
+    if (btnDesmarcar) btnDesmarcar.remove();
+  }
+  atualizarContadorConcluidos();
+}
+
+/* ---------- contador no rodapé/header ---------- */
+function atualizarContadorConcluidos() {
+  const concluidos = carregarConcluidos();
+  const n = Object.keys(concluidos).length;
+  const badge = document.getElementById('concluidosCount');
+  badge.textContent = 'Concluídos: ' + n;
+}
+
+/* ---------- inicialização DOMContentLoaded ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+  aplicarTemaInicial();
+
+  document.getElementById('themeToggle').addEventListener('click', alternarTema);
+
+  const concluidos = carregarConcluidos();
+  const cards = document.querySelectorAll('.card');
+
+  cards.forEach(card => {
+    // assegura data-id
+    if (!card.dataset.id) card.dataset.id = 'trabalho-' + Math.random().toString(36).slice(2,9);
+
+    // atualiza texto de prazo visível
+    const prazoTextElem = card.querySelector('.prazo-text');
+    if (prazoTextElem && card.dataset.prazo) {
+      const d = parsePrazo(card.dataset.prazo);
+      const dd = String(d.getDate()).padStart(2,'0');
+      const mm = String(d.getMonth()+1).padStart(2,'0');
+      const yyyy = d.getFullYear();
+      prazoTextElem.textContent = dd + '/' + mm + '/' + yyyy;
+    }
+
+    atualizarVisualPorPrazo(card);
+
+    const id = card.dataset.id;
+    const marcado = !!concluidos[id];
+    aplicarConcluidoNoCard(card, marcado);
+
+    const botao = card.querySelector('button.marcar');
+    if (botao) {
+      botao.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        // se já concluído o botão fica desabilitado; se quiser marcar tenta abrir modal
+        if (botao.disabled) return;
+        abrirModal(card, 'marcar');
+      });
+    }
+  });
+
+  // handlers do modal
+  modalYes.addEventListener('click', () => {
+    if (!currentCard || !pendingAction) { fecharModal(); return; }
+    const id = currentCard.dataset.id;
+    const state = carregarConcluidos();
+    if (pendingAction === 'marcar') {
+      state[id] = { concluidoEm: new Date().toISOString() };
+      salvarConcluidos(state);
+      aplicarConcluidoNoCard(currentCard, true);
+    } else if (pendingAction === 'desmarcar') {
+      delete state[id];
+      salvarConcluidos(state);
+      aplicarConcluidoNoCard(currentCard, false);
+    }
+    fecharModal();
+  });
+
+  modalNo.addEventListener('click', fecharModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) fecharModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('active')) fecharModal(); });
+
+  atualizarContadorConcluidos();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📘 Provas — 2º B</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --primary: #2196f3;
+    --bg: #f2f6fa;
+    --text: #2c3e50;
+    --card: #ffffff;
+    --feito: #27ae60;
+    --andamento: #f39c12;
+    --urgente: #e74c3c;
+    --footer: #cfd8dc;
+}
+
+body.dark {
+    --primary: #1a73e8;
+    --bg: #1e1e1e;
+    --text: #ffffff;
+    --card: #2c2c2c;
+    --feito: #27ae60;
+    --andamento: #f39c12;
+    --urgente: #e74c3c;
+    --footer: #111;
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  background-color: var(--primary);
+  color: white;
+  text-align: center;
+  width: 100%;
+  padding: 25px 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.container {
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin: 40px auto 50px;
+}
+
+.notice-card {
+  background-color: var(--card);
+  border-radius: 15px;
+  padding: 20px 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  border-left: 6px solid var(--andamento);
+}
+
+.notice-card.feito { border-left-color: var(--feito); }
+.notice-card.urgente { border-left-color: var(--urgente); }
+
+.notice-card h3 {
+  margin: 0 0 10px 0;
+  color: var(--text);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.notice-card p {
+  margin: 6px 0;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+button.marcar {
+  margin-top: 10px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+button.marcar:hover { background: #2176bd; }
+
+.back-button {
+  text-decoration: none;
+  background-color: var(--primary);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  display: inline-block;
+}
+.back-button:hover { opacity: 0.9; }
+
+footer {
+  text-align: center;
+  padding: 15px;
+  background-color: var(--footer);
+  width: 100%;
+  color: var(--text);
+  font-size: 0.9em;
+}
+</style>
+</head>
+<body>
+
+<header>📝 Provas — 2º B</header>
+
+<div class="container">
+  <a href="index.html" class="back-button">⬅ Voltar ao Painel Principal</a>
+  <a href="vencidoprovas.html" class="back-button" style="background:#e74c3c;">❌ Ver Provas Vencidas</a>
+</div>
+
+<footer>Calendário Escolar — Página de Provas</footer>
+
+<script>
+// Sincroniza tema
+if(localStorage.getItem("tema")==="dark") document.body.classList.add("dark");
+
+// Funções
+function formatDatePtBR(iso){
+  const d=new Date(iso);
+  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+}
+
+function renderCard(p){
+  const c=document.createElement('div');
+  c.classList.add('notice-card');
+  c.dataset.data=p.data;
+  c.innerHTML = `<h3>${p.titulo}</h3>
+                 <p><strong>Data:</strong> ${formatDatePtBR(p.data)}</p>
+                 <p>${p.descricao}</p>
+                 <button class="marcar">Marcar como Realizada</button>`;
+  return c;
+}
+
+function carregarProvas(){
+  const container=document.querySelector('.container');
+  const provas=JSON.parse(localStorage.getItem('provasData')||'[]');
+  provas.sort((a,b)=>new Date(a.data)-new Date(b.data));
+  provas.forEach(p=>container.appendChild(renderCard(p)));
+  atualizarCores();
+}
+
+function atualizarCores(){
+  const hoje=new Date();
+  document.querySelectorAll('.notice-card').forEach(card=>{
+    if(card.classList.contains('feito')) return;
+    card.classList.remove('andamento','urgente');
+    const data=new Date(card.dataset.data);
+    const diff=Math.ceil((data-hoje)/(1000*60*60*24));
+    if(diff<=0){ card.classList.add('urgente'); salvarVencido(card);}
+    else card.classList.add('andamento');
+  });
+}
+
+function salvarVencido(card){
+  const vencidos=JSON.parse(localStorage.getItem('provasVencidas')||'[]');
+  const titulo=card.querySelector('h3').textContent;
+  const descricao=card.querySelectorAll('p')[1].textContent;
+  if(!vencidos.some(v=>v.titulo===titulo)){
+    vencidos.push({titulo, descricao, data: card.dataset.data});
+    localStorage.setItem('provasVencidas', JSON.stringify(vencidos));
+  }
+  card.remove();
+}
+
+// Inicialização
+document.addEventListener('DOMContentLoaded',()=>{
+  carregarProvas();
+});
+</script>
+
+</body>
+</html>
